@@ -2,8 +2,8 @@
   "name": "partnership",
   "version": "0.1.0",
   "description": "A Codex-style desktop environment where users and AI agents work side by side and ship results straight to your folders.",
-  "author": "Vinnie",
-  "license": "MIT",
+  "author": "CreativLogic",
+  "license": "AGPL-3.0-or-later",
   "main": "./out/main/index.js",
   "type": "module",
   "scripts": {

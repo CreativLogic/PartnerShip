@@ -106,4 +106,9 @@ npm run package:linux   # AppImage + deb
 PartnerShip reads and writes only inside the chosen workspace root and its `.partnership` folder. Agent tool calls are validated against that boundary before anything touches disk, and every agent/automation action is appended to `.partnership/logs/audit.log`.
 
 ## License
-MIT
+
+**GNU Affero General Public License v3.0 (AGPL-3.0-or-later)** — see [LICENSE](LICENSE).
+
+Copyright (C) 2026 CreativLogic.
+
+PartnerShip is free software: you can redistribute it and/or modify it under the terms of the AGPL as published by the Free Software Foundation. This is **strong copyleft**: anyone who distributes the software **or runs a modified version to provide a network service** must make their **complete corresponding source — including all changes — publicly available** under the same license, and must preserve copyright notices. The software comes with **no warranty**.

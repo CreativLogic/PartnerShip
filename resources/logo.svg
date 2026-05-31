@@ -1,11 +1,27 @@
 <svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="256" height="256" rx="56" fill="#0e1116"/>
-  <!-- user figure (cyan) -->
-  <circle cx="86" cy="92" r="26" stroke="#36c5f0" stroke-width="13"/>
-  <path d="M40 196c0-31 21-52 46-52s46 21 46 52" stroke="#36c5f0" stroke-width="13" stroke-linecap="round"/>
-  <!-- agent figure (violet) -->
-  <circle cx="170" cy="92" r="26" stroke="#a855f7" stroke-width="13"/>
-  <path d="M124 196c0-31 21-52 46-52s46 21 46 52" stroke="#a855f7" stroke-width="13" stroke-linecap="round"/>
-  <!-- shared spark / ship -->
-  <path d="M128 104l11 23 25 2-18 16 5 25-23-13-23 13 5-25-18-16 25-2 11-23z" fill="#22c55e"/>
+
+  <!-- worktree branching off the folder's right edge -->
+  <g stroke="#22c55e" stroke-width="6" fill="none" stroke-linecap="round">
+    <path d="M176 150 H198"/>
+    <path d="M198 150 C 214 150 214 122 230 122"/>
+    <path d="M198 150 C 214 150 214 178 230 178"/>
+  </g>
+  <circle cx="198" cy="150" r="8" fill="#22c55e"/>
+  <circle cx="230" cy="122" r="8" fill="#0e1116" stroke="#22c55e" stroke-width="6"/>
+  <circle cx="230" cy="178" r="8" fill="#0e1116" stroke="#22c55e" stroke-width="6"/>
+
+  <!-- open folder -->
+  <path d="M40 120 a12 12 0 0 1 12-12 h34 l16 16 h54 a12 12 0 0 1 12 12 v8 H40 Z"
+        fill="#1a1f29" stroke="#36c5f0" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M44 136 H184 a10 10 0 0 1 9.7 12.4 l-9 40 a10 10 0 0 1 -9.7 7.6 H52 a10 10 0 0 1 -10-10 V146 a10 10 0 0 1 10-10 Z"
+        fill="#141821" stroke="#36c5f0" stroke-width="7" stroke-linejoin="round"/>
+
+  <!-- .partner command bubble with tail pointing into the folder -->
+  <g>
+    <rect x="52" y="40" width="132" height="50" rx="12" fill="#0a0c10" stroke="#323a4b" stroke-width="4"/>
+    <path d="M104 88 l14 0 l-7 14 z" fill="#0a0c10" stroke="#323a4b" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="70" cy="65" r="5" fill="#22c55e"/>
+    <text x="84" y="73" font-family="JetBrains Mono, ui-monospace, monospace" font-size="26" font-weight="600" fill="#e6e9ef">.partner</text>
+  </g>
 </svg>

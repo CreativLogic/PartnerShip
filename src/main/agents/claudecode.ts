@@ -32,13 +32,15 @@ export function claudeInstalled(): boolean {
   return findClaude() !== null
 }
 
-/** Path to the bundled PartnerShip MCP server entry (mcp/dist/index.js). */
+/** Path to the bundled PartnerShip MCP server entry. */
 function mcpEntry(): string | null {
-  // __dirname in dev = out/main; repo root two levels up.
   const candidates = [
+    // packaged: electron-builder extraResources -> resources/mcp/index.js
+    process.resourcesPath ? join(process.resourcesPath, 'mcp', 'index.js') : '',
+    // dev: __dirname = out/main, repo root two levels up
     resolve(__dirname, '../../mcp/dist/index.js'),
     resolve(process.cwd(), 'mcp/dist/index.js')
-  ]
+  ].filter(Boolean)
   return candidates.find((p) => existsSync(p)) ?? null
 }
 

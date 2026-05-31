@@ -11,7 +11,10 @@ files:
   - '!{PLAN.md,README.md}'
 asarUnpack:
   - '**/node_modules/node-pty/**'
-  - '**/node_modules/better-sqlite3/**'
+extraResources:
+  # bundled (self-contained) PartnerShip MCP server -> resources/mcp/index.js
+  - from: mcp/dist/index.js
+    to: mcp/index.js
 win:
   target:
     - nsis

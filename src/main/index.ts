@@ -5,7 +5,9 @@ import { registerHandlers } from './ipc/handlers'
 import { register } from './agents/provider'
 import { MockProvider } from './agents/mock'
 import { HttpProvider } from './agents/http'
+import { ClaudeCodeProvider } from './agents/claudecode'
 import { getConfig } from './store/appConfig'
+import * as ws from './fs/workspace'
 import * as pty from './pty/manager'
 import * as sched from './automations/scheduler'
 
@@ -47,7 +49,20 @@ app.whenReady().then(() => {
   // Register agent providers from config.
   const cfg = getConfig()
   register('mock', new MockProvider())
-  register('claude', new HttpProvider('claude', cfg.agentEndpoints.claude))
+  // Claude via subscription (drives the `claude` CLI + PartnerShip MCP).
+  register(
+    'claude',
+    new ClaudeCodeProvider(
+      () => getConfig().claude,
+      () => {
+        try {
+          return ws.getRoot()
+        } catch {
+          return undefined
+        }
+      }
+    )
+  )
   register('hermes', new HttpProvider('hermes', cfg.agentEndpoints.hermes))
 
   const win = createWindow()

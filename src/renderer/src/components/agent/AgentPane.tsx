@@ -3,7 +3,30 @@ import { useApp } from '../../store/app'
 import type { AgentKind, ChatMessage } from '@common/types'
 import { api } from '../../lib/cn'
 import { cn } from '../../lib/cn'
-import { Send, Zap, Square, Bot, ChevronDown } from 'lucide-react'
+import { Send, Zap, Square, Bot, ChevronDown, ShieldCheck, ShieldAlert } from 'lucide-react'
+
+function ClaudeStatusPill(): JSX.Element | null {
+  const [st, setSt] = useState<{ installed: boolean; mode: string; hasToken: boolean } | null>(null)
+  useEffect(() => {
+    void api().claudeStatus().then(setSt)
+  }, [])
+  if (!st) return null
+  if (st.installed) {
+    return (
+      <span className="flex items-center gap-1 text-[11px] text-ship px-1.5 py-0.5 rounded bg-ship/10" title={`Claude CLI ready · ${st.mode}`}>
+        <ShieldCheck size={11} /> {st.mode === 'subscription' ? 'subscription' : 'api key'}
+      </span>
+    )
+  }
+  return (
+    <span
+      className="flex items-center gap-1 text-[11px] text-amber-400 px-1.5 py-0.5 rounded bg-amber-400/10"
+      title="Claude CLI not found. Install it, then run `claude setup-token` to sign in with your Pro/Max subscription."
+    >
+      <ShieldAlert size={11} /> sign in
+    </span>
+  )
+}
 
 const ROLE_STYLE: Record<ChatMessage['role'], string> = {
   user: 'bg-user/10 border-user/30 text-ink',
@@ -105,6 +128,7 @@ export function AgentPane({ pane }: { pane: 0 | 1 }): JSX.Element {
         <div className="flex items-center gap-1.5 min-w-0">
           <Bot size={15} className="text-agent shrink-0" />
           <span className="text-sm truncate">{session?.title ?? `Agent ${pane + 1}`}</span>
+          {(session?.agent ?? 'mock') === 'claude' && <ClaudeStatusPill />}
         </div>
         <div className="flex items-center gap-1">
           <AgentSelect

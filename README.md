@@ -49,41 +49,65 @@ src/
 
 ### Prerequisites
 - Node.js 18+ (tested on 24)
-- Native build toolchain for `node-pty` + `better-sqlite3`:
+- For real terminals, `node-pty` needs a C++ toolchain (optional — the app runs without it, terminals show a hint until built):
   - **Windows**: Visual Studio Build Tools (Desktop C++), Python 3
-  - **Linux**: `build-essential`, `python3`, `make`, `g++`
+  - **Linux/WSL**: `build-essential`, `python3`, `make`, `g++`
+
+> **If your files live in WSL, run the app *inside* WSL** (via WSLg). You get native-fast file access to `/home/...`, real bash terminals, and an easier `node-pty` build (gcc instead of Visual Studio). The Windows build also works and auto-detects your WSL distro for terminals, but file IO over `\\wsl.localhost` is slower.
 
 ### Install & run (dev)
 ```bash
-npm install
+npm run setup     # installs app + MCP deps and builds the MCP server
+npm run rebuild   # builds node-pty against Electron (terminals) — needs the toolchain above
 npm run dev
 ```
+(`npm install` alone works too; `setup` just also prepares the MCP server.)
 
 **Windows + WSL**: run from a Windows shell. The terminal picker auto-detects installed WSL distros plus PowerShell and cmd.
 
-**Pure Linux**: `npm install && npm run dev`; terminals use bash/zsh and the local filesystem.
+**Pure Linux / WSL**: `npm run setup && npm run dev`; terminals use bash/zsh and the local filesystem.
 
-### Configure agents
-By default the **Mock** agent runs — no setup needed, fully exercises summon/take-over/tool-calls. To wire real agents, set HTTP endpoints in the global config (`~/.partnership/config.json`):
+### Agents
 
-```json
+The **Mock** agent runs out of the box (streams + applies a sample edit) so you can exercise summon/take-over with zero setup.
+
+#### Claude — with your Pro/Max **subscription** (no API key)
+
+PartnerShip drives the **Claude Code CLI** headlessly, so it uses your subscription OAuth — *not* the metered API. The CLI runs with `cwd = workspace`, edits your files with its own tools, and loads the **PartnerShip MCP** (see below) for app actions (Kanban, sessions).
+
+1. Install Claude Code, then sign in with your subscription:
+   ```bash
+   npm i -g @anthropic-ai/claude-code     # if not already installed
+   claude setup-token                      # subscription OAuth -> long-lived token
+   ```
+2. Pick **claude** as the agent in an agent pane. The pill shows `subscription` when the CLI is detected. That's it.
+
+Auth precedence (set in `~/.partnership/config.json` under `claude`):
+```jsonc
 {
-  "agentEndpoints": {
-    "claude": "http://localhost:8787",
-    "hermes": "http://localhost:8788"
+  "claude": {
+    "mode": "subscription",                 // or "apiKey"
+    "oauthToken": "<from claude setup-token>", // optional; else a logged-in session is reused
+    "permissionMode": "default",            // take-over flips this to "acceptEdits"
+    "extraMcpServers": {                     // give the in-app agent more integrations
+      "github": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"] }
+    }
   }
 }
 ```
+> In `subscription` mode the app strips `ANTHROPIC_API_KEY` from the child env so you're never billed against credits by accident.
 
-Each endpoint must accept `POST /agent/infer` with:
-```jsonc
-{
-  "messages": [{ "role": "user", "content": "..." }],
-  "tools": ["open_file", "edit_file", "run_command"],
-  "context": { "workspaceRoot": "...", "activeFilePath": "...", "activeFileText": "..." }
-}
+#### Integrations via MCP
+
+The repo ships an MCP server (`mcp/`) that exposes the workspace (files, Kanban, sessions, automations) to any MCP client. It's auto-loaded into the in-app Claude, and you can point Claude Desktop / external Claude Code at it too. Add any other MCP servers under `claude.extraMcpServers` to extend what the in-app agent can reach. See [`mcp/README.md`](mcp/README.md).
+
+```bash
+npm run mcp:install && npm run mcp:build    # build the MCP server (part of `npm run setup`)
 ```
-and return either an SSE / NDJSON stream of `AgentEvent` objects (`token`, `tool-call`, `done`, …) or a single JSON response. See `src/common/events.ts` and `src/common/tools.ts`.
+
+#### Hermes / custom HTTP agents
+
+`hermes` (and any custom kind) use an HTTP bridge — set `agentEndpoints.hermes` to a server that accepts `POST /agent/infer` and streams `AgentEvent` objects. See `src/common/events.ts` + `src/common/tools.ts`.
 
 ### Build installers
 ```bash

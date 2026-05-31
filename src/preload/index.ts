@@ -86,7 +86,11 @@ const api = {
   // config
   getConfig: (): Promise<GlobalConfig> => ipcRenderer.invoke(IPC.configGet),
   setConfig: (patch: Partial<GlobalConfig>): Promise<GlobalConfig> =>
-    ipcRenderer.invoke(IPC.configSet, patch)
+    ipcRenderer.invoke(IPC.configSet, patch),
+
+  // claude (subscription) status
+  claudeStatus: (): Promise<{ installed: boolean; mode: string; hasToken: boolean }> =>
+    ipcRenderer.invoke(IPC.claudeStatus)
 }
 
 export type PartnerShipApi = typeof api

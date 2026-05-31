@@ -9,6 +9,7 @@ import * as pty from '../pty/manager'
 import * as sched from '../automations/scheduler'
 import { history } from '../automations/history'
 import { providerFor, listAllAgents } from '../agents/provider'
+import { claudeInstalled } from '../agents/claudecode'
 import { getConfig, setConfig, rememberWorkspace } from '../store/appConfig'
 
 let mainWindow: BrowserWindow | null = null
@@ -134,6 +135,16 @@ export function registerHandlers(win: BrowserWindow): void {
   // ---- config ----
   ipcMain.handle(IPC.configGet, () => getConfig())
   ipcMain.handle(IPC.configSet, (_e, patch) => setConfig(patch))
+
+  // ---- claude (subscription) status ----
+  ipcMain.handle(IPC.claudeStatus, () => {
+    const cfg = getConfig().claude
+    return {
+      installed: claudeInstalled(),
+      mode: cfg?.mode ?? 'subscription',
+      hasToken: Boolean(cfg?.oauthToken || cfg?.apiKey)
+    }
+  })
 }
 
 function safeCwd(): string {

@@ -110,6 +110,21 @@ export interface WorkspaceSettings {
   conversationLimit: number // default 13
 }
 
+export type ClaudeAuthMode = 'subscription' | 'apiKey'
+
+export interface ClaudeConfig {
+  /** subscription = drive the `claude` CLI (Pro/Max OAuth, no API billing). */
+  mode: ClaudeAuthMode
+  /** Long-lived token from `claude setup-token` (subscription, headless). */
+  oauthToken?: string
+  /** Only used when mode === 'apiKey'. */
+  apiKey?: string
+  /** Claude Code permission mode when take-over is off. */
+  permissionMode?: 'default' | 'acceptEdits' | 'plan'
+  /** Extra MCP servers to load into the in-app Claude, by name. */
+  extraMcpServers?: Record<string, { command: string; args?: string[]; env?: Record<string, string> }>
+}
+
 export interface GlobalConfig {
   theme: 'dark' | 'light'
   lastWorkspace?: string
@@ -118,6 +133,7 @@ export interface GlobalConfig {
     claude?: string
     hermes?: string
   }
+  claude?: ClaudeConfig
   layout?: Record<string, number>
 }
 

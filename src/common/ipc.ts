@@ -40,7 +40,9 @@ export const IPC = {
   kanbanSave: 'kanban:save',
   // config
   configGet: 'config:get',
-  configSet: 'config:set'
+  configSet: 'config:set',
+  // claude (subscription) status
+  claudeStatus: 'claude:status'
 } as const
 
 export type IpcChannel = (typeof IPC)[keyof typeof IPC]

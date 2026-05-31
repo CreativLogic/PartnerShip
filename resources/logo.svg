@@ -1,0 +1,11 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" rx="56" fill="#0e1116"/>
+  <!-- user figure (cyan) -->
+  <circle cx="86" cy="92" r="26" stroke="#36c5f0" stroke-width="13"/>
+  <path d="M40 196c0-31 21-52 46-52s46 21 46 52" stroke="#36c5f0" stroke-width="13" stroke-linecap="round"/>
+  <!-- agent figure (violet) -->
+  <circle cx="170" cy="92" r="26" stroke="#a855f7" stroke-width="13"/>
+  <path d="M124 196c0-31 21-52 46-52s46 21 46 52" stroke="#a855f7" stroke-width="13" stroke-linecap="round"/>
+  <!-- shared spark / ship -->
+  <path d="M128 104l11 23 25 2-18 16 5 25-23-13-23 13 5-25-18-16 25-2 11-23z" fill="#22c55e"/>
+</svg>

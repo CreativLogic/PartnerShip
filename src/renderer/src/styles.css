@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+  }
+  body {
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #323a4b;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #46506a;
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  .ps-panel {
+    @apply bg-base-900 border border-base-700/60 rounded-lg overflow-hidden;
+  }
+  .ps-tab {
+    @apply px-3 py-1.5 text-sm rounded-md text-ink-dim hover:text-ink hover:bg-base-800 transition-colors;
+  }
+  .ps-tab-active {
+    @apply bg-base-800 text-ink;
+  }
+  .ps-btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium
+      bg-base-800 text-ink hover:bg-base-700 transition-colors disabled:opacity-40
+      disabled:cursor-not-allowed;
+  }
+  .ps-btn-ship {
+    @apply bg-ship/15 text-ship hover:bg-ship/25 border border-ship/30;
+  }
+  .ps-input {
+    @apply bg-base-850 border border-base-700 rounded-md px-2.5 py-1.5 text-sm text-ink
+      placeholder:text-ink-faint focus:outline-none focus:ring-1 focus:ring-user/60;
+  }
+  .resizer-handle {
+    @apply bg-transparent hover:bg-user/30 transition-colors;
+  }
+}
